@@ -13,6 +13,7 @@ import Control.Monad.Adaptive.Ref
 import Control.Monad(ap,when)
 import Data.IORef(IORef)
 import System.Exit
+import System.IO(hFlush, stdout)
 
 type InIO m a = m IO IORef a
 type IOMod a = InIO Modifiable a
@@ -60,6 +61,7 @@ clear = pos 0 0 ++ esc "J"
 cleareol = esc "K"
 
 readPrompt c s = do prAt 20 c 0 (s++"> "++ cleareol)
+                    hFlush stdout
                     s <- getLine
                     when (s == "quit") $ exitWith ExitSuccess
                     return s
