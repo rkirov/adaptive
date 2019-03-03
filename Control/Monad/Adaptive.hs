@@ -90,6 +90,11 @@ instance Ref m r => Monad (Changeable m r) where
   return a   = Ch $ \k -> k a
   Ch m >>= f = Ch $ \k -> m $ \a -> deCh (f a) k
 
+instance Ref m r => Applicative (Changeable m r) where
+  pure = return
+  -- Doesn't work :/ Thankfully, not really used.
+  --(Ch f) <*> (Ch a) = Ch $ \k -> (k f) <*> (k a)
+
 instance Ref m r => Functor (Changeable m r) where
   fmap f m = m >>= return . f
 
@@ -104,6 +109,10 @@ instance Ref m r => Monad (Adaptive m r) where
 
 instance Ref m r => Functor (Adaptive m r) where
   fmap f m = m >>= return . f
+
+instance Ref m r => Applicative (Adaptive m r) where
+  pure = return
+  (Ad f) <*> (Ad a) = Ad $ \e -> (f e) <*> (a e)
 
 readMod (Mo (r,chg,es)) = do
    start <- inAd stepTime

@@ -25,7 +25,7 @@ delete       :: Ref m r => CircularList m r a -> m ()
 
 -- Local:
 
-data CircularList m r a = CL (r (CircularList m r a,a,CircularList m r a))
+data CircularList m r a = CL (r (CircularList m r a, a, CircularList m r a))
                         | DummyCL (m a)
 
 deCL (CL l) = l
@@ -37,11 +37,11 @@ circularList a = do
   return l
 
 get :: Ref m r => CircularList m r a -> 
-                  m (CircularList m r a, a,CircularList m r a)
+                  m (CircularList m r a, a, CircularList m r a)
 get = readRef . deCL
 
 set :: Ref m r => CircularList m r a -> 
-                  (CircularList m r a, a,CircularList m r a) -> m ()
+                  (CircularList m r a, a, CircularList m r a) -> m ()
 set = writeRef . deCL
 
 update l a = do

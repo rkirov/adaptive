@@ -71,6 +71,10 @@ instance Ref m r => Monad (OrderedList m r a) where
   return a = inM (return a)
   (OL m) >>= f = OL $ \e -> m e >>= \a -> deOL (f a) e
 
+instance Ref m r => Applicative (OrderedList m r a) where
+  pure = return
+  (OL f) <*> (OL a) = OL $ \e -> (f e) <*> (a e)
+
 instance Ref m r => Functor (OrderedList m r a) where 
   fmap f m = m >>= return . f
 
